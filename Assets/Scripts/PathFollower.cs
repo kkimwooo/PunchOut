@@ -2,6 +2,8 @@
 
 public class PathFollower : MonoBehaviour
 {
+    public Rigidbody2D rb2D { get; set; }
+    
     public Transform[] path;
     public float speed = 5.0f;
     public float reachDist = 1.0f;
@@ -10,15 +12,16 @@ public class PathFollower : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        rb2D = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
         //  Vector3 direction = path[currentPoint].position - transform.position; 
-        float distance = Vector3.Distance(path[currentPoint].position, transform.position);
-        transform.position = Vector3.MoveTowards(transform.position, path[currentPoint].position, Time.smoothDeltaTime * speed);
+        float distance = Vector2.Distance(path[currentPoint].position, transform.position);
+        Vector2 newPosition = Vector2.MoveTowards(transform.position, path[currentPoint].position, Time.smoothDeltaTime * speed);
+        rb2D.MovePosition(newPosition);
 
         if (distance <= reachDist)
             currentPoint++;
