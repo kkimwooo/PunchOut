@@ -4,12 +4,11 @@ using UnityEngine.EventSystems;
 
 public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
 {
-     
     private Image bgImg;
     private Image joystickImg;
     private Vector3 inputVector;
 
-    private void Start()
+    void Start()
     {
         bgImg = GetComponent<Image>();
         joystickImg = transform.GetChild(0).GetComponent<Image>();
@@ -23,15 +22,13 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
             pos.x = (pos.x / bgImg.rectTransform.sizeDelta.x);
             pos.y = (pos.y / bgImg.rectTransform.sizeDelta.y);
 
-            inputVector = new Vector3(pos.x * 2 + 1, 0, pos.y * 2 - 1);
-            //inputVector = new Vector2(pos.x * 2 + 1, 0);
+            inputVector = new Vector3(pos.x * 2 + 1, pos.y * 2 - 1, 0);
             inputVector = (inputVector.magnitude > 1.0f) ? inputVector.normalized : inputVector;
 
             // Move Joystick IMG
             joystickImg.rectTransform.anchoredPosition = new Vector3(inputVector.x * (bgImg.rectTransform.sizeDelta.x / 3)
-                                                                     , inputVector.z * (bgImg.rectTransform.sizeDelta.y / 3));
+                                                                     , inputVector.y * (bgImg.rectTransform.sizeDelta.y / 3));
 
-            //Debug.Log(pos); 
         }
     }
 
@@ -46,7 +43,8 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
         joystickImg.rectTransform.anchoredPosition = Vector3.zero;
     }
 
-    public float Horizontal()
+    //PlayerController 스크립트에서 inputVector.x 값을 받기 위해 사용될 함수
+    public float GetHorizontalValue()
     {
         if (inputVector.x != 0)
             return inputVector.x;
@@ -57,9 +55,10 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
         }
     }
 
-    public float Vertical() {
-        if (inputVector.z != 0)
-            return inputVector.z;
+    //PlayerController 스크립트에서 inputVector.y 값을 받기 위해 사용될 함수
+    public float GetVerticalValue() {
+        if (inputVector.y != 0)
+            return inputVector.y;
         else
         {
             //return Input.GetAxisRaw("Vertical ");

@@ -6,12 +6,17 @@ using UnityEngine.SceneManagement;
 public class LevelManager : MonoBehaviour {
 
     public static LevelManager Instance { get; private set; }
+    public PlayerController playerController;
+
+    public bool isPaused { get; set; }
+
     public TimeSpan RunningTime { get { return DateTime.UtcNow - started; } }
     private DateTime started;
 
     void Awake()
     {
         Instance = this;
+        isPaused = false;
     }
 
 	void Start ()
@@ -23,9 +28,9 @@ public class LevelManager : MonoBehaviour {
 	
 	}
 
-    void OnApplicationPause(bool flag)
+    void OnApplicationPause(bool pause)
     {
-        if (flag)
+        if (pause)
         {
             PauseGame();
         }
@@ -37,12 +42,16 @@ public class LevelManager : MonoBehaviour {
 
     public void PauseGame()
     {
+        isPaused = true;
+        Time.timeScale = 0;
 
+        //TODO: Show Pause UI
     }
 
     public void ResumeGame()
     {
-
+        isPaused = false;
+        Time.timeScale = 1;
     }
 
     public void KillPlayer()
@@ -52,7 +61,7 @@ public class LevelManager : MonoBehaviour {
 
     private IEnumerator KillPlayerCo()
     {
-        //PlayerController.Kill()
+        playerController.Kill();
         yield return new WaitForSeconds(2f);
         //SceneManager.LoadScene()    
     }
