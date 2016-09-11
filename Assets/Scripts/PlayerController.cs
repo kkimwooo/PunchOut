@@ -6,17 +6,23 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb2D { get; set; }
     public Vector3 moveVector { get; set; }
     public float moveSpeed;
+
     public Joystick joystick;
+
+    public static float startFadeTime = 2.0f;
 
     void Awake()
     {
+        System.GC.Collect();
+
         rb2D = GetComponent<Rigidbody2D>();
         moveVector = new Vector3(0, 0, 0);
     }
 
     void Start()
     {
-
+        zFoxFadeFilter.instance.FadeIn(Color.black, startFadeTime);
+        startFadeTime = 2.0f;
     }
 
     void Update()
@@ -59,7 +65,7 @@ public class PlayerController : MonoBehaviour
     void Move()
     {
         rb2D.AddForce(moveVector * moveSpeed);
-        Debug.Log("velocity x: " + rb2D.velocity.x + " y: " + rb2D.velocity.y);
+        //Debug.Log("velocity x: " + rb2D.velocity.x + " y: " + rb2D.velocity.y);
     }
 
     void EaseVelocity()
