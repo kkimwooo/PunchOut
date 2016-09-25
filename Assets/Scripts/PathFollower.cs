@@ -6,7 +6,7 @@ public class PathFollower : MonoBehaviour
     
     public Transform[] path;
     public float speed = 5.0f;
-    public float reachDist = 1.0f;
+    public float reachDist;
     public int currentPoint = 0;
 
     // Use this for initialization
@@ -21,18 +21,12 @@ public class PathFollower : MonoBehaviour
         //  Vector3 direction = path[currentPoint].position - transform.position; 
         float distance = Vector3.Distance(path[currentPoint].position, transform.position);
         Vector3 newPosition = Vector3.MoveTowards(transform.position, path[currentPoint].position, Time.smoothDeltaTime * speed);
-
-        Vector3 dir = newPosition - transform.position;
-        Debug.Log(dir);
-        Quaternion rotation = Quaternion.LookRotation(new Vector3(0,0,dir.z));
-        transform.rotation = rotation;
-        //Debug.Log(newPosition);
-        //transform.Rotate (new Vec)
-        //transform.LookAt(newPosition + Vector3.up * transform.position.y * -90);
-        //Quaternion rot = Quaternion.LookRotation(transform.position - newPosition, Vector3.forward);
-        //transform.rotation = rot;
-
         rb2D.MovePosition(newPosition);
+
+        Vector3 direction = path[currentPoint].position - transform.position;
+        direction.Normalize();
+        float rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0f, 0f, rotation);
 
         if (distance <= reachDist)
             currentPoint++;
@@ -40,6 +34,7 @@ public class PathFollower : MonoBehaviour
         if (currentPoint >= path.Length)
             currentPoint = 0;
     }
+
     /*
     void OnDrawGizmos()
     {
@@ -49,7 +44,7 @@ public class PathFollower : MonoBehaviour
             {
                 if (path[i] != null)
                 {
-                    //Gizmos.DrawSphere(path[i].position, reachDist);
+                    Gizmos.DrawSphere(path[i].position, reachDist);
                 }
             }
         }

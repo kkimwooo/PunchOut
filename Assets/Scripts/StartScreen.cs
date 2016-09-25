@@ -19,6 +19,12 @@ public class StartScreen : MonoBehaviour {
         Invoke("SceneJump", 1.2f);
     }
 
+    void Button_Option(MenuObject_Button button)
+    {
+        Debug.Log("Button_Option");
+        //옵션화면 활성화
+    }
+
     void SceneJump() {
         Debug.Log(string.Format("Start Game : {0}", jumpSceneName));
         SceneManager.LoadScene(jumpSceneName);
